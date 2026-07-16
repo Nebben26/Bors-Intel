@@ -299,6 +299,32 @@ h3 {
   text-transform: uppercase;
 }
 
+.hero-identity {
+  display: grid;
+  gap: 0.28rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.hero-identity strong,
+.hero-identity span {
+  display: block;
+}
+
+.hero-identity strong {
+  color: var(--forest);
+  font-size: 0.9rem;
+  font-weight: 760;
+  letter-spacing: 0.025em;
+}
+
+.hero-identity span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
 .hero-deck {
   max-width: 42rem;
   margin-bottom: 2rem;
@@ -1825,6 +1851,46 @@ a.metric-source:hover {
   font-weight: 640;
 }
 
+.section-intro-lead {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.operating-test-brief {
+  padding-block: clamp(4rem, 8vw, 6.5rem) 0;
+}
+
+.operating-test-brief-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(20rem, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--mint-50);
+  padding: clamp(1.75rem, 5vw, 3.5rem);
+}
+
+.operating-test-brief-panel h2 {
+  max-width: 14ch;
+}
+
+.operating-test-brief-panel p {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+}
+
+.operating-test-brief-panel a {
+  color: var(--forest);
+  font-weight: 720;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
 .operating-test-section {
   padding-block: clamp(4rem, 8vw, 6.5rem) 0;
 }
@@ -1944,6 +2010,34 @@ a.metric-source:hover {
   color: var(--text-muted);
   font-size: 0.78rem;
   text-align: center;
+}
+
+.operating-test-page {
+  background:
+    radial-gradient(circle at 8% 15%, var(--mint-100), transparent 30rem),
+    var(--white);
+}
+
+.operating-test-page-section {
+  min-height: calc(100svh - 11.5rem);
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+}
+
+.operating-test-page .operating-test-copy h1 {
+  max-width: 15ch;
+  margin-bottom: 1.5rem;
+}
+
+.operating-test-page .operating-test-panel {
+  box-shadow: var(--shadow-md);
+}
+
+.operating-test-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
 .contact-section {
@@ -2195,6 +2289,7 @@ a.metric-source:hover {
   .web-build-grid,
   .ai-system-grid,
   .about-layout,
+  .operating-test-brief-panel,
   .operating-test-panel,
   .contact-panel {
     grid-template-columns: 1fr;
@@ -2481,6 +2576,15 @@ a.metric-source:hover {
   }
 
   .operating-test-copy > .button {
+    width: 100%;
+  }
+
+  .operating-test-page-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .operating-test-page-actions .button {
     width: 100%;
   }
 
