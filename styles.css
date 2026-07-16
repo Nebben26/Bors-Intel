@@ -1281,6 +1281,215 @@ a.metric-source:hover {
   padding: 0.48rem 0.72rem;
 }
 
+.ai-section {
+  background: var(--forest);
+  color: var(--white);
+  padding-block: var(--section-y);
+}
+
+.ai-section :focus-visible {
+  outline-color: var(--white);
+}
+
+.ai-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(21rem, 0.62fr);
+  align-items: end;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.ai-intro h2 {
+  max-width: 17ch;
+  color: var(--white);
+}
+
+.ai-intro-copy p {
+  margin-bottom: 1rem;
+  color: var(--mint-200);
+  font-size: 0.98rem;
+}
+
+.ai-intro-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-system-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ai-system-card {
+  min-height: 39rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: var(--radius-xl);
+  background: var(--mint-50);
+  color: var(--ink);
+  box-shadow: 0 22px 64px rgb(0 0 0 / 15%);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.ai-system-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.ai-system-topline span,
+.ai-system-topline strong {
+  color: var(--forest);
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.ai-system-topline strong {
+  border-radius: 999px;
+  background: var(--mint-200);
+  padding: 0.32rem 0.55rem;
+}
+
+.ai-system-card h3 {
+  min-height: 4.8rem;
+  margin: 2rem 0 1rem;
+  color: var(--forest);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  letter-spacing: -0.045em;
+}
+
+.ai-system-card > p:not(.ai-output-proof) {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.ai-system-card ul {
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-system-card li {
+  position: relative;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  padding: 0.72rem 0 0.72rem 1.15rem;
+}
+
+.ai-system-card li:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-system-card li::before {
+  position: absolute;
+  top: 1.05rem;
+  left: 0.05rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--forest-soft);
+  content: "";
+}
+
+.ai-output-proof {
+  margin: auto 0 0;
+  border-radius: var(--radius-md);
+  background: var(--mint-200);
+  color: var(--forest);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  padding: 0.8rem 0.9rem;
+}
+
+.ai-training-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(24rem, 1.22fr);
+  gap: 1.25rem clamp(2rem, 5vw, 4rem);
+  margin-top: 1rem;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: var(--radius-xl);
+  background: var(--ink);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.ai-training-panel h3 {
+  max-width: 16ch;
+  margin: 0 0 1rem;
+  color: var(--white);
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+}
+
+.ai-training-panel > div > p:last-child {
+  margin-bottom: 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.92rem;
+}
+
+.ai-training-panel > .button {
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+}
+
+.ai-method {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: stretch;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-method li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-top: 1px solid rgb(255 255 255 / 18%);
+  color: var(--white);
+  font-size: 0.84rem;
+  font-weight: 650;
+  padding: 0.9rem 0.75rem 0.9rem 0;
+}
+
+.ai-method li:nth-child(even) {
+  border-left: 1px solid rgb(255 255 255 / 18%);
+  padding-right: 0;
+  padding-left: 0.9rem;
+}
+
+.ai-method li:last-child {
+  grid-column: 1 / -1;
+  border-left: 0;
+  padding-left: 0;
+}
+
+.ai-method span {
+  color: var(--mint-200);
+  font-size: 0.64rem;
+  font-weight: 760;
+}
+
+.ai-proof-note {
+  max-width: 70rem;
+  margin: 1rem auto 0;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
 .evidence-section {
   padding-block: var(--section-y);
 }
@@ -1978,11 +2187,13 @@ a.metric-source:hover {
   }
 
   .section-intro,
+  .ai-intro,
   .reel-heading,
   .production-heading,
   .bors-card,
   .email-layout,
   .web-build-grid,
+  .ai-system-grid,
   .about-layout,
   .operating-test-panel,
   .contact-panel {
@@ -2045,6 +2256,27 @@ a.metric-source:hover {
 
   .web-build-card {
     min-height: 31rem;
+  }
+
+  .ai-system-card {
+    min-height: auto;
+  }
+
+  .ai-system-card h3 {
+    min-height: auto;
+  }
+
+  .ai-training-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-training-panel > .button,
+  .ai-method {
+    grid-column: 1;
+  }
+
+  .ai-method {
+    grid-row: auto;
   }
 
   .about-layout {
@@ -2220,6 +2452,25 @@ a.metric-source:hover {
     gap: 0.45rem;
   }
 
+  .ai-system-card {
+    padding: 1.5rem;
+  }
+
+  .ai-method {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-method li:nth-child(even),
+  .ai-method li:last-child {
+    grid-column: auto;
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .ai-training-panel > .button {
+    width: 100%;
+  }
+
   .operating-test-deliverables ol {
     grid-template-columns: 1fr;
   }
@@ -2292,6 +2543,7 @@ a.metric-source:hover {
   .proof-section,
   .email-section,
   .web-section,
+  .ai-section,
   .about-section,
   .operating-test-panel,
   .contact-panel {
@@ -2304,6 +2556,7 @@ a.metric-source:hover {
   .bors-section,
   .email-section,
   .web-section,
+  .ai-section,
   .work-section,
   .about-section,
   .operating-test-section,
