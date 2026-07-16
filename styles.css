@@ -278,7 +278,7 @@ h3 {
   position: absolute;
   z-index: -1;
   top: 10%;
-  right: -12%;
+  right: 0;
   width: 38rem;
   height: 38rem;
   border-radius: 50%;
