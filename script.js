@@ -19,3 +19,43 @@ if (reducedMotion || !("IntersectionObserver" in window)) {
 
   revealItems.forEach((item) => observer.observe(item));
 }
+
+const copyButtons = document.querySelectorAll("[data-copy]");
+const copyStatus = document.querySelector("[data-copy-status]");
+
+const fallbackCopy = (value) => {
+  const input = document.createElement("textarea");
+  input.value = value;
+  input.setAttribute("readonly", "");
+  input.style.position = "fixed";
+  input.style.opacity = "0";
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  input.remove();
+};
+
+copyButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const value = button.dataset.copy;
+    const originalLabel = button.textContent;
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        fallbackCopy(value);
+      }
+
+      button.textContent = "Copied";
+      if (copyStatus) copyStatus.textContent = `${value} copied to clipboard.`;
+
+      window.setTimeout(() => {
+        button.textContent = originalLabel;
+        if (copyStatus) copyStatus.textContent = "";
+      }, 2200);
+    } catch {
+      if (copyStatus) copyStatus.textContent = `Copy failed. Select ${value} manually.`;
+    }
+  });
+});
