@@ -510,6 +510,37 @@ h3 {
   color: var(--forest);
 }
 
+.short-version-section {
+  background: var(--forest);
+  color: var(--white);
+  padding-block: clamp(3.75rem, 7vw, 5.75rem);
+}
+
+.short-version-layout {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.52fr) minmax(0, 1.48fr);
+  align-items: start;
+  gap: clamp(2rem, 6vw, 5.5rem);
+}
+
+.section-label-light {
+  color: var(--mint-200);
+}
+
+.short-version-layout h2 {
+  max-width: 11ch;
+  color: var(--white);
+  font-size: clamp(2.25rem, 4vw, 3.35rem);
+}
+
+.short-version-copy {
+  max-width: 49rem;
+  margin: 0;
+  color: rgb(255 255 255 / 88%);
+  font-size: clamp(1.08rem, 1.65vw, 1.32rem);
+  line-height: 1.72;
+}
+
 .section-intro {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.58fr);
@@ -643,6 +674,55 @@ h3 {
   padding-block: var(--section-y);
 }
 
+.revenue-metric {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.72fr) minmax(18rem, 1.35fr) auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-bottom: 1rem;
+  border: 1px solid var(--forest);
+  border-radius: var(--radius-lg);
+  background: var(--forest);
+  box-shadow: var(--shadow-md);
+  color: var(--white);
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.revenue-metric .metric-value {
+  margin: 0 0 0.55rem;
+  color: var(--white);
+}
+
+.revenue-metric h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.revenue-metric > p {
+  max-width: 36rem;
+  margin: 0;
+  color: var(--mint-200);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.revenue-metric .metric-source {
+  margin: 0;
+  border: 1px solid rgb(255 255 255 / 42%);
+  border-radius: 0.75rem;
+  color: var(--white);
+  padding: 0.72rem 0.9rem;
+  white-space: nowrap;
+}
+
+.revenue-metric .metric-source:hover {
+  border-color: var(--white);
+  background: rgb(255 255 255 / 8%);
+  text-decoration: none;
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -738,6 +818,129 @@ a.metric-source:hover {
   color: var(--text-muted);
   font-size: 0.84rem;
   line-height: 1.55;
+}
+
+.bankful-proof {
+  scroll-margin-top: 6rem;
+  margin: clamp(2.75rem, 6vw, 4.75rem) 0 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--mint-50);
+  box-shadow: var(--shadow-md);
+  padding: clamp(1.35rem, 4vw, 2.5rem);
+}
+
+.bankful-proof-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.65fr);
+  align-items: end;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-bottom: 1.5rem;
+}
+
+.bankful-proof-heading .section-label {
+  margin-bottom: 0.55rem;
+}
+
+.bankful-proof-heading h3 {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.bankful-proof-heading > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.bankful-totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.bankful-totals > div {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  padding: 1rem 1.1rem;
+}
+
+.bankful-totals dt {
+  color: var(--forest-soft);
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.bankful-totals dd {
+  margin: 0.35rem 0 0;
+  color: var(--ink);
+  font-size: clamp(1.2rem, 2.25vw, 1.65rem);
+  font-weight: 740;
+  letter-spacing: -0.04em;
+}
+
+.bankful-image-link {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  color: var(--forest);
+  text-decoration: none;
+}
+
+.bankful-image-viewport {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 187 / 90;
+  background: #f4f5f7;
+}
+
+.bankful-image-viewport img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 102.68%;
+  max-width: none;
+  height: auto;
+  transform: translate(0, -11.52%);
+  transition: transform 220ms ease;
+}
+
+.bankful-image-link:hover .bankful-image-viewport img {
+  transform: translate(0, -11.52%) scale(1.012);
+}
+
+.bankful-image-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  font-size: 0.76rem;
+  font-weight: 720;
+  padding: 0.75rem 1rem;
+}
+
+.bankful-proof figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.bankful-proof figcaption a {
+  color: var(--forest);
+  font-weight: 700;
+  text-underline-offset: 0.2rem;
 }
 
 .bors-section {
@@ -2271,6 +2474,24 @@ a.metric-source:hover {
     padding-block: 4.5rem 5.5rem;
   }
 
+  .short-version-layout,
+  .revenue-metric,
+  .bankful-proof-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .short-version-layout h2 {
+    max-width: 14ch;
+  }
+
+  .revenue-metric {
+    align-items: start;
+  }
+
+  .revenue-metric .metric-source {
+    justify-self: start;
+  }
+
   .hero-copy {
     max-width: 45rem;
   }
@@ -2462,6 +2683,14 @@ a.metric-source:hover {
 
   .metric-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bankful-totals {
+    grid-template-columns: 1fr;
+  }
+
+  .bankful-image-viewport {
+    aspect-ratio: 16 / 9;
   }
 
   .capability-grid-wide,
