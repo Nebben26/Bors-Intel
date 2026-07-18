@@ -510,6 +510,15 @@ h3 {
   color: var(--forest);
 }
 
+.portrait-caption {
+  margin: 0.85rem 0.5rem 0;
+  color: var(--forest);
+  font-size: 0.84rem;
+  font-weight: 670;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .short-version-section {
   background: var(--forest);
   color: var(--white);
@@ -2658,12 +2667,6 @@ a.metric-source:hover {
 .evidence-cta-panel > div:last-child > p {
   margin-bottom: 1.5rem;
   color: var(--text-muted);
-}
-
-.about-personality {
-  color: var(--forest) !important;
-  font-weight: 680;
-  font-style: italic;
 }
 
 .footer-inner-compact {
