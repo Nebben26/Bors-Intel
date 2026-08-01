@@ -181,6 +181,13 @@ h3 {
   letter-spacing: 0;
 }
 
+.brand-logo {
+  display: block;
+  width: 3rem;
+  height: auto;
+  flex: 0 0 auto;
+}
+
 .nav {
   display: flex;
   align-items: center;
