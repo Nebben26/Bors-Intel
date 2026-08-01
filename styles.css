@@ -2266,7 +2266,7 @@ a.metric-source:hover {
 .contact-panel {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.66fr);
-  align-items: end;
+  align-items: start;
   gap: clamp(2.5rem, 7vw, 6rem);
   border-radius: var(--radius-xl);
   background: var(--forest);
