@@ -59,3 +59,34 @@ copyButtons.forEach((button) => {
     }
   });
 });
+
+// Keep the main portfolio intact while making the contract path impossible to miss.
+if (document.body.classList.contains("homepage-focused")) {
+  const headerActions = document.querySelector(".header-actions");
+  const heroActions = document.querySelector(".hero-actions");
+  const contactActions = document.querySelector(".contact-actions");
+
+  if (headerActions && !headerActions.querySelector('[href="/contract/"]')) {
+    const contractLink = document.createElement("a");
+    contractLink.className = "header-link";
+    contractLink.href = "/contract/";
+    contractLink.innerHTML = 'Contract work <span aria-hidden="true">↗</span>';
+    headerActions.prepend(contractLink);
+  }
+
+  if (heroActions && !heroActions.querySelector('[href="/contract/"]')) {
+    const contractButton = document.createElement("a");
+    contractButton.className = "button button-secondary";
+    contractButton.href = "/contract/";
+    contractButton.innerHTML = 'Contract availability <span aria-hidden="true">→</span>';
+    heroActions.appendChild(contractButton);
+  }
+
+  if (contactActions && !contactActions.querySelector('[href="/contract/"]')) {
+    const contractButton = document.createElement("a");
+    contractButton.className = "button button-outline-light";
+    contractButton.href = "/contract/";
+    contractButton.innerHTML = 'Contract availability <span aria-hidden="true">→</span>';
+    contactActions.appendChild(contractButton);
+  }
+}
