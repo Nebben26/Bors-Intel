@@ -1,0 +1,31 @@
+name: Verify Black Current Live Homepage
+
+on:
+  push:
+    branches:
+      - black-current-netlify-check-temp
+    paths:
+      - .github/workflows/bcm-verify-live.yml
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production homepage
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 12); do
+            curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/?verify=$(date +%s)-$i" -o /tmp/home.html
+            if grep -q 'Build an American audience you own' /tmp/home.html; then
+              echo 'NEW_BLACK_CURRENT_LIVE=true'
+              grep -o 'Build an American audience you own[^<]*' /tmp/home.html | head -1
+              exit 0
+            fi
+            echo "Attempt $i still old"
+            sleep 5
+          done
+          echo 'NEW_BLACK_CURRENT_LIVE=false'
+          if grep -q 'The news moves on' /tmp/home.html; then echo 'OLD_MEMBERSHIP_SITE_STILL_LIVE=true'; fi
+          head -c 500 /tmp/home.html
+          exit 1
