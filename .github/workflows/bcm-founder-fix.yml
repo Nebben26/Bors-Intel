@@ -1,0 +1,110 @@
+name: Black Current Founder Portrait Fix
+
+on:
+  push:
+    branches:
+      - black-current-netlify-check-temp
+    paths:
+      - .github/workflows/bcm-founder-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout temporary deploy branch
+        uses: actions/checkout@v4
+        with:
+          ref: black-current-netlify-check-temp
+          fetch-depth: 0
+
+      - name: Create ephemeral deployment key
+        shell: bash
+        run: |
+          set -euo pipefail
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out /tmp/bcm-founder-private.pem >/dev/null 2>&1
+          openssl rsa -pubout -in /tmp/bcm-founder-private.pem -out bcm-founder-public.pem >/dev/null 2>&1
+          git config user.name "black-current-deploy-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add bcm-founder-public.pem
+          git commit -m "Publish Black Current founder-fix deploy key"
+          git push origin HEAD:black-current-netlify-check-temp
+
+      - name: Build founder-size-only production patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site
+          mkdir -p site/assets site/thanks
+          TS="$(date +%s)"
+          curl -fsSL "https://blackcurrentmedia.com/?founderfix=$TS" -o site/index.html
+          curl -fsSL "https://blackcurrentmedia.com/thanks/?founderfix=$TS" -o site/thanks/index.html
+          curl -fsSL "https://blackcurrentmedia.com/assets/bankful-sales-report.png?founderfix=$TS" -o site/assets/bankful-sales-report.png
+          curl -fsSL "https://blackcurrentmedia.com/assets/ben-horch-headshot.jpg?founderfix=$TS" -o site/assets/ben-horch-headshot.jpg
+          curl -fsSL "https://blackcurrentmedia.com/black-current-favicon.svg?v=4&founderfix=$TS" -o site/black-current-favicon.svg
+          cat > site/_headers <<'HEADERS'
+          /*
+            X-Frame-Options: DENY
+            X-Content-Type-Options: nosniff
+            Referrer-Policy: strict-origin-when-cross-origin
+            Permissions-Policy: camera=(), microphone=(), geolocation=()
+          /black-current-favicon.svg
+            Cache-Control: public, max-age=604800
+          /assets/*
+            Cache-Control: public, max-age=604800
+          HEADERS
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('site/index.html')
+          s = p.read_text()
+          replacements = {
+            '.founder{background:#f8fafb}': '.founder{background:#f8fafb;padding:64px 0}',
+            '.founder-grid{display:grid;grid-template-columns:.68fr 1.32fr;gap:60px;align-items:center}': '.founder-grid{display:grid;grid-template-columns:250px 1fr;gap:50px;align-items:center}',
+            '.portrait{position:relative}': '.portrait{position:relative;width:100%;max-width:250px;justify-self:start}',
+            '.portrait{max-width:430px}': '.portrait{max-width:230px}',
+            '.portrait{max-width:none}': '.portrait{max-width:210px;margin:0 auto 8px}'
+          }
+          for old, new in replacements.items():
+              if old not in s:
+                  raise SystemExit(f'Missing expected CSS: {old}')
+              s = s.replace(old, new, 1)
+          p.write_text(s)
+          PY
+          grep -q 'grid-template-columns:250px 1fr' site/index.html
+          grep -q 'max-width:250px' site/index.html
+          grep -q 'max-width:210px' site/index.html
+
+      - name: Wait for encrypted one-time Netlify authorization
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f /tmp/bcm-founder-key.b64 /tmp/bcm-founder-data.b64
+          for i in $(seq 1 100); do
+            git fetch -q origin black-current-netlify-check-temp
+            if git show origin/black-current-netlify-check-temp:bcm-founder-key.b64 > /tmp/bcm-founder-key.b64 2>/dev/null && git show origin/black-current-netlify-check-temp:bcm-founder-data.b64 > /tmp/bcm-founder-data.b64 2>/dev/null; then
+              break
+            fi
+            sleep 3
+          done
+          test -s /tmp/bcm-founder-key.b64
+          test -s /tmp/bcm-founder-data.b64
+
+      - name: Deploy founder-size patch to Black Current production
+        shell: bash
+        env:
+          NETLIFY_SITE_ID: 6f65cb2a-0db4-4f88-9065-36ceca609639
+        run: |
+          set -euo pipefail
+          base64 -d /tmp/bcm-founder-key.b64 > /tmp/bcm-founder-key.enc
+          openssl pkeyutl -decrypt -inkey /tmp/bcm-founder-private.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -in /tmp/bcm-founder-key.enc > /tmp/bcm-founder-aes-key
+          base64 -d /tmp/bcm-founder-data.b64 > /tmp/bcm-founder-proxy.enc
+          openssl enc -d -aes-256-cbc -pbkdf2 -pass file:/tmp/bcm-founder-aes-key -in /tmp/bcm-founder-proxy.enc > /tmp/bcm-founder-proxy.txt
+          PROXY="$(cat /tmp/bcm-founder-proxy.txt)"
+          case "$PROXY" in
+            https://netlify-mcp.netlify.app/proxy/*) ;;
+            *) echo "Invalid deploy authorization"; exit 3 ;;
+          esac
+          cd site
+          npx -y @netlify/mcp@latest --site-id "$NETLIFY_SITE_ID" --proxy-path "$PROXY" --no-wait
