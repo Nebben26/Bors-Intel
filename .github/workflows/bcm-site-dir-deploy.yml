@@ -47,17 +47,36 @@ jobs:
               raise SystemExit('Approved Black Current build marker missing')
           html = src.split(start, 1)[1].split(end, 1)[0]
           html = '\n'.join(line[10:] if line.startswith('          ') else line for line in html.splitlines()) + '\n'
+          needle = '<meta name="viewport" content="width=device-width,initial-scale=1">'
+          favicon = '<link rel="icon" href="/black-current-favicon.svg?v=2" type="image/svg+xml" sizes="any"><link rel="shortcut icon" href="/black-current-favicon.svg?v=2" type="image/svg+xml">'
+          if needle not in html:
+              raise SystemExit('Head marker missing')
+          html = html.replace(needle, needle + favicon, 1)
           Path('site/index.html').write_text(html)
           PY
+          cat > site/black-current-favicon.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+            <rect width="64" height="64" rx="12" fill="#0b1b2c"/>
+            <g fill="#ffffff">
+              <rect x="10" y="13" width="44" height="8" rx="1"/>
+              <path d="M10 27h16c5.5 0 8.5-6 14-6h14v8H41c-5.5 0-8.5 6-15 6H10z"/>
+              <rect x="10" y="43" width="44" height="8" rx="1"/>
+            </g>
+          </svg>
+          SVG
           cat > site/_headers <<'HEADERS'
           /*
             X-Frame-Options: DENY
             X-Content-Type-Options: nosniff
             Referrer-Policy: strict-origin-when-cross-origin
             Permissions-Policy: camera=(), microphone=(), geolocation=()
+          /black-current-favicon.svg
+            Cache-Control: public, max-age=604800
           HEADERS
           test -s site/index.html
+          test -s site/black-current-favicon.svg
           grep -q "Build an American audience you own" site/index.html
+          grep -q 'black-current-favicon.svg?v=2' site/index.html
           grep -q 'data-netlify="true"' site/index.html
 
       - name: Wait for encrypted one-time Netlify authorization
