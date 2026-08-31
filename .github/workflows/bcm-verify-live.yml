@@ -29,3 +29,4 @@ jobs:
           if grep -q 'The news moves on' /tmp/home.html; then echo 'OLD_MEMBERSHIP_SITE_STILL_LIVE=true'; fi
           head -c 500 /tmp/home.html
           exit 1
+# fresh production-origin verification
