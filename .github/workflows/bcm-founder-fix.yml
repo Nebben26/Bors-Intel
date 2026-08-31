@@ -32,18 +32,18 @@ jobs:
           git commit -m "Publish Black Current founder-fix deploy key"
           git push origin HEAD:black-current-netlify-check-temp
 
-      - name: Build founder-size-only production patch
+      - name: Build compact-founder production patch
         shell: bash
         run: |
           set -euo pipefail
           rm -rf site
           mkdir -p site/assets site/thanks
           TS="$(date +%s)"
-          curl -fsSL "https://blackcurrentmedia.com/?founderfix=$TS" -o site/index.html
-          curl -fsSL "https://blackcurrentmedia.com/thanks/?founderfix=$TS" -o site/thanks/index.html
-          curl -fsSL "https://blackcurrentmedia.com/assets/bankful-sales-report.png?founderfix=$TS" -o site/assets/bankful-sales-report.png
-          curl -fsSL "https://blackcurrentmedia.com/assets/ben-horch-headshot.jpg?founderfix=$TS" -o site/assets/ben-horch-headshot.jpg
-          curl -fsSL "https://blackcurrentmedia.com/black-current-favicon.svg?v=4&founderfix=$TS" -o site/black-current-favicon.svg
+          curl -fsSL "https://blackcurrentmedia.com/?founderfix2=$TS" -o site/index.html
+          curl -fsSL "https://blackcurrentmedia.com/thanks/?founderfix2=$TS" -o site/thanks/index.html
+          curl -fsSL "https://blackcurrentmedia.com/assets/bankful-sales-report.png?founderfix2=$TS" -o site/assets/bankful-sales-report.png
+          curl -fsSL "https://blackcurrentmedia.com/assets/ben-horch-headshot.jpg?founderfix2=$TS" -o site/assets/ben-horch-headshot.jpg
+          curl -fsSL "https://blackcurrentmedia.com/black-current-favicon.svg?v=4&founderfix2=$TS" -o site/black-current-favicon.svg
           cat > site/_headers <<'HEADERS'
           /*
             X-Frame-Options: DENY
@@ -59,22 +59,32 @@ jobs:
           from pathlib import Path
           p = Path('site/index.html')
           s = p.read_text()
-          replacements = {
-            '.founder{background:#f8fafb}': '.founder{background:#f8fafb;padding:64px 0}',
-            '.founder-grid{display:grid;grid-template-columns:.68fr 1.32fr;gap:60px;align-items:center}': '.founder-grid{display:grid;grid-template-columns:250px 1fr;gap:50px;align-items:center}',
-            '.portrait{position:relative}': '.portrait{position:relative;width:100%;max-width:250px;justify-self:start}',
-            '.portrait{max-width:430px}': '.portrait{max-width:230px}',
-            '.portrait{max-width:none}': '.portrait{max-width:210px;margin:0 auto 8px}'
-          }
-          for old, new in replacements.items():
-              if old not in s:
-                  raise SystemExit(f'Missing expected CSS: {old}')
-              s = s.replace(old, new, 1)
+          override = '''
+          <style id="founder-size-fix-v2">
+            .founder{padding:56px 0!important}
+            .founder-grid{grid-template-columns:180px minmax(0,1fr)!important;gap:40px!important;align-items:center!important}
+            .portrait{width:180px!important;max-width:180px!important;height:220px!important;overflow:hidden!important;align-self:center!important;justify-self:start!important;margin:0!important}
+            .portrait img{width:100%!important;height:100%!important;max-width:none!important;aspect-ratio:auto!important;object-fit:cover!important;object-position:center 28%!important}
+            .portrait:after{left:8px!important;bottom:8px!important;padding:5px 6px!important;font-size:7px!important}
+            @media(max-width:980px){
+              .founder-grid{grid-template-columns:160px minmax(0,1fr)!important;gap:30px!important}
+              .portrait{width:160px!important;max-width:160px!important;height:195px!important;margin:0!important}
+            }
+            @media(max-width:680px){
+              .founder-grid{grid-template-columns:1fr!important;gap:22px!important}
+              .portrait{width:140px!important;max-width:140px!important;height:170px!important;margin:0 auto!important}
+              .founder{padding:46px 0!important}
+            }
+          </style>
+          '''
+          if 'founder-size-fix-v2' in s:
+              raise SystemExit('Founder v2 override already present')
+          s = s.replace('</head>', override + '</head>', 1)
           p.write_text(s)
           PY
-          grep -q 'grid-template-columns:250px 1fr' site/index.html
-          grep -q 'max-width:250px' site/index.html
-          grep -q 'max-width:210px' site/index.html
+          grep -q 'grid-template-columns:180px minmax(0,1fr)' site/index.html
+          grep -q 'height:220px!important' site/index.html
+          grep -q 'width:140px!important' site/index.html
 
       - name: Wait for encrypted one-time Netlify authorization
         shell: bash
@@ -91,7 +101,7 @@ jobs:
           test -s /tmp/bcm-founder-key.b64
           test -s /tmp/bcm-founder-data.b64
 
-      - name: Deploy founder-size patch to Black Current production
+      - name: Deploy compact founder patch to Black Current production
         shell: bash
         env:
           NETLIFY_SITE_ID: 6f65cb2a-0db4-4f88-9065-36ceca609639
