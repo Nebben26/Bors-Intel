@@ -48,8 +48,12 @@ jobs:
             if(!(await desktop.getByText('Build an American audience you own.').isVisible())) throw new Error('Hero missing');
             const bankful = desktop.locator('img[src="/assets/bankful-sales-report.png"]');
             const headshot = desktop.locator('img[src="/assets/ben-horch-headshot.jpg"]');
+            await bankful.scrollIntoViewIfNeeded();
+            await bankful.waitFor({state:'visible'});
             if(!(await bankful.evaluate(el=>el.complete&&el.naturalWidth>0))) throw new Error('Bankful image failed');
-            if(!(await headshot.evaluate(el=>el.complete&&el.naturalWidth>0))) throw new Error('Headshot failed');
+            await headshot.scrollIntoViewIfNeeded();
+            await headshot.waitFor({state:'visible'});
+            await desktop.waitForFunction(()=>{const el=document.querySelector('img[src="/assets/ben-horch-headshot.jpg"]');return el&&el.complete&&el.naturalWidth>0});
             await desktop.locator('[data-engagement="Audience Asset Thesis / Blueprint"]').first().click();
             const selected = await desktop.locator('#engagement').inputValue();
             if(selected!=='Audience Asset Thesis / Blueprint') throw new Error('CTA did not preselect engagement');
