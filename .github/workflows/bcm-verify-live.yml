@@ -41,7 +41,6 @@ jobs:
         run: |
           cat > /tmp/qa.js <<'JS'
           const { chromium } = require('playwright');
-          const fs = require('fs');
           (async()=>{
             const browser = await chromium.launch({headless:true});
             const desktop = await browser.newPage({viewport:{width:1440,height:1000}});
@@ -72,7 +71,7 @@ jobs:
             console.log('BLACK_CURRENT_BROWSER_QA=true');
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
-          node /tmp/qa.js
+          NODE_PATH="$PWD/node_modules" node /tmp/qa.js
 
       - name: Upload QA screenshots
         uses: actions/upload-artifact@v4
