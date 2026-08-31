@@ -11,15 +11,19 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Check production homepage and favicon
+      - name: Check expanded production homepage and favicon
         shell: bash
         run: |
           set -euo pipefail
           curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/?verify=$(date +%s)" -o /tmp/home.html
           grep -q 'Build an American audience you own' /tmp/home.html
-          grep -q 'black-current-favicon.svg?v=2' /tmp/home.html
-          curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/black-current-favicon.svg?v=2&verify=$(date +%s)" -o /tmp/favicon.svg
+          grep -q 'Proof before adjectives' /tmp/home.html
+          grep -q 'One system, not disconnected deliverables' /tmp/home.html
+          grep -q '550K' /tmp/home.html
+          grep -q '45.1%' /tmp/home.html
+          grep -q 'black-current-favicon.svg?v=3' /tmp/home.html
+          curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/black-current-favicon.svg?v=3&verify=$(date +%s)" -o /tmp/favicon.svg
           grep -q '#0b1b2c' /tmp/favicon.svg
           grep -q '<svg' /tmp/favicon.svg
-          echo 'NEW_BLACK_CURRENT_LIVE=true'
-          echo 'BLACK_CURRENT_FAVICON_LIVE=true'
+          echo 'BEEFED_UP_BLACK_CURRENT_LIVE=true'
+          echo 'BLACK_CURRENT_FAVICON_V3_LIVE=true'
