@@ -22,6 +22,7 @@ jobs:
           grep -q 'data-engagement="Audience Asset Thesis / Blueprint"' /tmp/home.html
           grep -q 'form-success' /tmp/home.html
           grep -q 'black-current-favicon.svg?v=4' /tmp/home.html
+          grep -q 'founder-size-fix-v2' /tmp/home.html
           curl -fsSL "https://blackcurrentmedia.com/assets/bankful-sales-report.png?verify=$(date +%s)" -o /tmp/bankful.png
           curl -fsSL "https://blackcurrentmedia.com/assets/ben-horch-headshot.jpg?verify=$(date +%s)" -o /tmp/headshot.jpg
           curl -fsSL "https://blackcurrentmedia.com/thanks/?verify=$(date +%s)" -o /tmp/thanks.html
@@ -54,6 +55,11 @@ jobs:
             await headshot.scrollIntoViewIfNeeded();
             await headshot.waitFor({state:'visible'});
             await desktop.waitForFunction(()=>{const el=document.querySelector('img[src="/assets/ben-horch-headshot.jpg"]');return el&&el.complete&&el.naturalWidth>0});
+            const portraitBox = await desktop.locator('.portrait').boundingBox();
+            const headshotBox = await headshot.boundingBox();
+            if(!portraitBox || portraitBox.width > 181 || portraitBox.height > 221) throw new Error('Founder portrait box still too large: '+JSON.stringify(portraitBox));
+            if(!headshotBox || headshotBox.width > 181 || headshotBox.height > 221) throw new Error('Founder image still too large: '+JSON.stringify(headshotBox));
+            console.log('FOUNDER_DESKTOP_BOX='+JSON.stringify(portraitBox));
             await desktop.locator('[data-engagement="Audience Asset Thesis / Blueprint"]').first().click();
             const selected = await desktop.locator('#engagement').inputValue();
             if(selected!=='Audience Asset Thesis / Blueprint') throw new Error('CTA did not preselect engagement');
@@ -63,6 +69,12 @@ jobs:
 
             const mobile = await browser.newPage({viewport:{width:390,height:844}});
             await mobile.goto('https://blackcurrentmedia.com/?mobileqa='+Date.now(),{waitUntil:'networkidle'});
+            const mobileHeadshot = mobile.locator('img[src="/assets/ben-horch-headshot.jpg"]');
+            await mobileHeadshot.scrollIntoViewIfNeeded();
+            await mobileHeadshot.waitFor({state:'visible'});
+            const mobilePortraitBox = await mobile.locator('.portrait').boundingBox();
+            if(!mobilePortraitBox || mobilePortraitBox.width > 141 || mobilePortraitBox.height > 171) throw new Error('Mobile founder portrait too large: '+JSON.stringify(mobilePortraitBox));
+            console.log('FOUNDER_MOBILE_BOX='+JSON.stringify(mobilePortraitBox));
             const mobileOverflow = await mobile.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
             if(mobileOverflow>2) throw new Error('Mobile horizontal overflow: '+mobileOverflow);
             if(!(await mobile.locator('.mobile-cta').isVisible())) throw new Error('Mobile CTA missing');
@@ -80,7 +92,7 @@ jobs:
       - name: Upload QA screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: black-current-qa
+          name: black-current-qa-compact-founder
           path: |
             qa-desktop.png
             qa-mobile.png
