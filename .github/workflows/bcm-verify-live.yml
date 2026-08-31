@@ -11,19 +11,74 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Check expanded production homepage and favicon
+      - name: Check production files and routes
         shell: bash
         run: |
           set -euo pipefail
           curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/?verify=$(date +%s)" -o /tmp/home.html
           grep -q 'Build an American audience you own' /tmp/home.html
-          grep -q 'Proof before adjectives' /tmp/home.html
+          grep -q 'The revenue claim has a receipt' /tmp/home.html
           grep -q 'One system, not disconnected deliverables' /tmp/home.html
-          grep -q '550K' /tmp/home.html
-          grep -q '45.1%' /tmp/home.html
-          grep -q 'black-current-favicon.svg?v=3' /tmp/home.html
-          curl -fsSL -H 'Cache-Control: no-cache' "https://blackcurrentmedia.com/black-current-favicon.svg?v=3&verify=$(date +%s)" -o /tmp/favicon.svg
-          grep -q '#0b1b2c' /tmp/favicon.svg
-          grep -q '<svg' /tmp/favicon.svg
-          echo 'BEEFED_UP_BLACK_CURRENT_LIVE=true'
-          echo 'BLACK_CURRENT_FAVICON_V3_LIVE=true'
+          grep -q 'data-engagement="Audience Asset Thesis / Blueprint"' /tmp/home.html
+          grep -q 'form-success' /tmp/home.html
+          grep -q 'black-current-favicon.svg?v=4' /tmp/home.html
+          curl -fsSL "https://blackcurrentmedia.com/assets/bankful-sales-report.png?verify=$(date +%s)" -o /tmp/bankful.png
+          curl -fsSL "https://blackcurrentmedia.com/assets/ben-horch-headshot.jpg?verify=$(date +%s)" -o /tmp/headshot.jpg
+          curl -fsSL "https://blackcurrentmedia.com/thanks/?verify=$(date +%s)" -o /tmp/thanks.html
+          test -s /tmp/bankful.png
+          test -s /tmp/headshot.jpg
+          grep -q 'Your project details are in' /tmp/thanks.html
+
+      - name: Install browser QA
+        shell: bash
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 --no-save >/dev/null 2>&1
+          npx playwright install chromium >/dev/null 2>&1
+
+      - name: Render and test desktop and mobile
+        shell: bash
+        run: |
+          cat > /tmp/qa.js <<'JS'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          (async()=>{
+            const browser = await chromium.launch({headless:true});
+            const desktop = await browser.newPage({viewport:{width:1440,height:1000}});
+            await desktop.goto('https://blackcurrentmedia.com/?browserqa='+Date.now(),{waitUntil:'networkidle'});
+            if(!(await desktop.getByText('Build an American audience you own.').isVisible())) throw new Error('Hero missing');
+            const bankful = desktop.locator('img[src="/assets/bankful-sales-report.png"]');
+            const headshot = desktop.locator('img[src="/assets/ben-horch-headshot.jpg"]');
+            if(!(await bankful.evaluate(el=>el.complete&&el.naturalWidth>0))) throw new Error('Bankful image failed');
+            if(!(await headshot.evaluate(el=>el.complete&&el.naturalWidth>0))) throw new Error('Headshot failed');
+            await desktop.locator('[data-engagement="Audience Asset Thesis / Blueprint"]').first().click();
+            const selected = await desktop.locator('#engagement').inputValue();
+            if(selected!=='Audience Asset Thesis / Blueprint') throw new Error('CTA did not preselect engagement');
+            const overflow = await desktop.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+            if(overflow>2) throw new Error('Desktop horizontal overflow: '+overflow);
+            await desktop.screenshot({path:'qa-desktop.png',fullPage:true});
+
+            const mobile = await browser.newPage({viewport:{width:390,height:844}});
+            await mobile.goto('https://blackcurrentmedia.com/?mobileqa='+Date.now(),{waitUntil:'networkidle'});
+            const mobileOverflow = await mobile.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+            if(mobileOverflow>2) throw new Error('Mobile horizontal overflow: '+mobileOverflow);
+            if(!(await mobile.locator('.mobile-cta').isVisible())) throw new Error('Mobile CTA missing');
+            await mobile.screenshot({path:'qa-mobile.png',fullPage:true});
+
+            const thanks = await browser.newPage({viewport:{width:1000,height:800}});
+            await thanks.goto('https://blackcurrentmedia.com/thanks/?qa='+Date.now(),{waitUntil:'networkidle'});
+            if(!(await thanks.getByText('Your project details are in.').isVisible())) throw new Error('Thank-you route failed');
+            await browser.close();
+            console.log('BLACK_CURRENT_BROWSER_QA=true');
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/qa.js
+
+      - name: Upload QA screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: black-current-qa
+          path: |
+            qa-desktop.png
+            qa-mobile.png
+          retention-days: 1
