@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b15">
+  <meta name="description" content="Apply for Ben Horch's $1,500 Funnel Forensics Audit for subscription finance brands.">
+  <link rel="canonical" href="https://borsintel.com/audit/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/home-sales.css?v=20260914c">
+  <link rel="stylesheet" href="/intake.css?v=20260914a">
+  <title>Funnel Forensics Audit — Ben Horch</title>
+</head>
+<body class="intake-page">
+  <header class="intake-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="/" aria-label="Ben Horch home"><span class="brand-mark" aria-hidden="true">BH</span><span>Ben Horch</span></a>
+      <a class="intake-back" href="/#offers">← Back to offers</a>
+    </div>
+  </header>
+
+  <main class="intake-main">
+    <div class="shell intake-layout">
+      <section class="intake-intro">
+        <p class="intake-eyebrow">Funnel Forensics</p>
+        <h1>Find the highest-value leak before you spend more on growth.</h1>
+        <p class="intake-lede">I map the path from attention to email, offer, checkout, and retention, then isolate the three highest-ROI fixes and the revenue math behind them.</p>
+        <div class="intake-price"><small>Fixed fee</small>$1,500</div>
+        <ul class="intake-points">
+          <li>Full funnel and lifecycle teardown</li>
+          <li>Revenue math behind each recommended fix</li>
+          <li>Marked-up page and flow recommendations</li>
+          <li>Prioritized 7-day install plan</li>
+          <li>48-hour delivery after kickoff materials are received</li>
+        </ul>
+        <p class="intake-note"><strong>Guarantee:</strong> if I cannot identify at least $10K in credible revenue upside or leakage, I waive the audit fee. Secure payment will be handled through Stripe once the engagement is accepted.</p>
+      </section>
+
+      <section class="intake-card" aria-labelledby="audit-form-title">
+        <div class="form-heading">
+          <h2 id="audit-form-title">Request the audit</h2>
+          <p>Give me enough context to determine whether the audit is a strong fit and where I should look first.</p>
+        </div>
+        <form class="intake-form" name="funnel-forensics" method="POST" action="/submitted/" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="funnel-forensics">
+          <p class="honeypot"><label>Do not fill this out <input name="bot-field"></label></p>
+          <div class="form-row">
+            <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="brand">Brand / company</label><input id="brand" name="brand" type="text" required></div>
+            <div class="field"><label for="website">Website</label><input id="website" name="website" type="url" inputmode="url" placeholder="https://" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="model">Business model</label><select id="model" name="business-model" required><option value="" selected disabled>Select one</option><option>Paid finance newsletter</option><option>Trading education / alerts</option><option>Finance community / membership</option><option>Subscription software / data</option><option>Creator / info product</option><option>Other</option></select></div>
+            <div class="field"><label for="revenue">Approx. monthly revenue</label><select id="revenue" name="monthly-revenue" required><option value="" selected disabled>Select range</option><option>Under $10K</option><option>$10K–$25K</option><option>$25K–$50K</option><option>$50K–$100K</option><option>$100K–$250K</option><option>$250K+</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="list">Email list size <span class="optional">(optional)</span></label><input id="list" name="email-list-size" type="text" placeholder="e.g. 18,000"></div>
+            <div class="field"><label for="traffic">Monthly site traffic <span class="optional">(optional)</span></label><input id="traffic" name="monthly-traffic" type="text" placeholder="e.g. 40,000 visits"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="email-platform">Email platform <span class="optional">(optional)</span></label><input id="email-platform" name="email-platform" type="text" placeholder="Brevo, Klaviyo, Kit, etc."></div>
+            <div class="field"><label for="checkout">Checkout / billing platform <span class="optional">(optional)</span></label><input id="checkout" name="checkout-platform" type="text" placeholder="Stripe, Whop, Skool, etc."></div>
+          </div>
+          <div class="field"><label for="problem">Where do you think money is leaking right now?</label><textarea id="problem" name="suspected-leak" placeholder="Tell me what is underperforming, what you have already tried, and what you want fixed." required></textarea></div>
+          <div class="field"><label for="goal">What would make this audit an obvious win?</label><textarea id="goal" name="success-outcome" placeholder="Example: recover inactive subscribers, increase checkout completion, improve lead capture, etc." required></textarea></div>
+          <div class="checkbox-field"><input id="fee" name="fee-acknowledgement" type="checkbox" value="I understand the fixed audit fee is $1,500" required><label for="fee">I understand the Funnel Forensics Audit is a fixed $1,500 engagement if accepted.</label></div>
+          <button class="button button-primary form-submit" type="submit">Submit audit request</button>
+          <p class="form-privacy">Your information is used only to evaluate and respond to this project request.</p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="intake-footer"><div class="shell"><span>© 2026 Ben Horch · Retention &amp; Conversion Operator</span><a href="/evidence/">Inspect the evidence →</a></div></footer>
+</body>
+</html>
